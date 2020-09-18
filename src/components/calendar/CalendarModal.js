@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import moment from "moment";
 import Swal from "sweetalert2";
@@ -7,126 +7,54 @@ import { uiCloseModal } from "../../actions/ui";
 import { DateTimePicker } from "@material-ui/pickers";
 import EventIcon from "@material-ui/icons/Event";
 import { IconButton, InputAdornment } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
-import lightBlue from "@material-ui/core/colors/lightBlue";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
-
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-  },
-});
-
-const materialTheme = createMuiTheme({
-  overrides: {
-    MuiPickersToolbar: {
-      toolbar: {
-        backgroundColor: "#343a40",
-      },
-    },
-    MuiPickerDTTabs: {
-      tabs: {
-        backgroundColor: "#343a40",
-      },
-    },
-    MuiPickersCalendarHeader: {
-      switchHeader: {
-        // backgroundColor: lightBlue.A200,
-        // color: "white",
-      },
-    },
-    MuiPickersDay: {
-      day: {
-        color: "#191919",
-        "&hover": {
-          backgroundColor: "#343a40",
-        },
-      },
-      daySelected: {
-        backgroundColor: "#636a72",
-        "&:hover": {
-          backgroundColor: "#343a40",
-        },
-      },
-      dayDisabled: {
-        color: "#0000002b",
-      },
-      current: {
-        color: "#343a40",
-      },
-    },
-    MuiPickersModal: {
-      dialogAction: {
-        color: "#343a40",
-      },
-    },
-    MuiButton: {
-      textPrimary: {
-        color: "#343a40",
-      },
-    },
-    MuiPickersClockPointer: {
-      pointer: {
-        backgroundColor: "#636a72",
-      },
-      thumb: {
-        border: "14px solid #636a72",
-      },
-      noPoint: {
-        backgroundColor: "#636a72",
-      },
-    },
-    MuiPickersClock: {
-      pin: {
-        backgroundColor: "#636a72",
-      },
-    },
-  },
-});
+import {
+  customStyles,
+  materialTheme,
+  useStyles,
+} from "../../styles/materialStyles";
+import {
+  eventAddNew,
+  eventClearActiveEvent,
+  eventUpdated,
+} from "../../actions/events";
 
 Modal.setAppElement("#root");
 
 const now = moment().minutes(0).seconds(0).add(1, "hours");
 const final = now.clone().add(1, "hours");
 
+const initEvent = {
+  title: "",
+  notes: "",
+  start: now.toDate(),
+  end: final.toDate(),
+};
+
 const CalendarModal = () => {
   const classes = useStyles();
 
   const { modalOpen } = useSelector((state) => state.ui);
+  const { activeEvent } = useSelector((state) => state.calendar);
 
   const dispatch = useDispatch();
 
   const [dateStart, setDateStart] = useState(now.toDate());
   const [dateEnd, setDateEnd] = useState(final.toDate());
-  const [titleValid, setTitleValid] = useState(true);
 
-  const [formValues, setFormValues] = useState({
-    title: "Evento",
-    notes: "",
-    start: now.toDate(),
-    end: final.toDate(),
-  });
+  const [formValues, setFormValues] = useState(initEvent);
 
   const { title, notes, start, end } = formValues;
 
-  const handleInputChange = ({ target }) => {
-    if (target.value.length < 2) {
-      setTitleValid(false);
+  useEffect(() => {
+    if (activeEvent) {
+      setFormValues(activeEvent);
     } else {
-      setTitleValid(true);
+      setFormValues(initEvent);
     }
+  }, [activeEvent, setFormValues]);
+
+  const handleInputChange = ({ target }) => {
     setFormValues({
       ...formValues,
       [target.name]: target.value,
@@ -135,6 +63,8 @@ const CalendarModal = () => {
 
   const closeModal = () => {
     dispatch(uiCloseModal());
+    dispatch(eventClearActiveEvent());
+    setFormValues(initEvent);
   };
 
   const handleStartDateChange = (e) => {
@@ -162,22 +92,39 @@ const CalendarModal = () => {
     }
 
     if (title.trim().length < 2) {
-      return setTitleValid(false);
+      return Swal.fire(
+        "Error",
+        "You need to add the Title of the event",
+        "error"
+      );
     }
 
-    setTitleValid(true);
+    if (activeEvent) {
+      dispatch(eventUpdated(formValues));
+    } else {
+      dispatch(
+        eventAddNew({
+          ...formValues,
+          id: new Date().getTime(),
+          user: {
+            _id: "123",
+            name: "Edgar",
+          },
+        })
+      );
+    }
     closeModal();
   };
 
   return (
     <Modal
-      isOpen={true}
+      isOpen={modalOpen}
       style={customStyles}
-      closeTimeoutMS={500}
+      closeTimeoutMS={250}
       className="modal"
       overlayClassName="modal-fondo"
     >
-      <h1> New Event </h1>
+      <h1> {activeEvent ? "Editar Evento" : "Nuevo Evento"} </h1>
       <hr />
       <form className="container" onSubmit={handleSubmitForm}>
         <div className="form-group">
@@ -190,7 +137,6 @@ const CalendarModal = () => {
               minDate={dateStart}
               value={dateStart}
               onChange={handleStartDateChange}
-              onError={console.log}
               disablePast
               showTodayButton
               format="yyyy/MM/DD HH:mm"
@@ -216,8 +162,12 @@ const CalendarModal = () => {
               ampm={true}
               minDate={dateEnd}
               value={dateEnd}
+              error={moment(dateStart).isSameOrAfter(moment(dateEnd))}
+              helperText={
+                moment(dateStart).isSameOrAfter(moment(dateEnd)) &&
+                "Date has to be greater than start date"
+              }
               onChange={handleEndDateChange}
-              onError={console.log}
               disablePast
               showTodayButton
               format="yyyy/MM/DD HH:mm"
@@ -239,7 +189,9 @@ const CalendarModal = () => {
           <label>Title</label>
           <input
             type="text"
-            className={`form-control ${titleValid ? "is-valid" : "is-invalid"}`}
+            className={`form-control ${
+              title.length > 1 ? "is-valid" : "is-invalid"
+            }`}
             placeholder="Título del evento"
             name="title"
             autoComplete="off"
@@ -273,7 +225,7 @@ const CalendarModal = () => {
         </button>
 
         <button
-          type="submit"
+          type="button"
           className="btn btn-outline-danger btn-block"
           onClick={closeModal}
         >
