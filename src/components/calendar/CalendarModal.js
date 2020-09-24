@@ -14,9 +14,9 @@ import {
   useStyles,
 } from "../../styles/materialStyles";
 import {
-  eventAddNew,
   eventClearActiveEvent,
-  eventUpdated,
+  eventStartAddNew,
+  eventStartUpdate,
 } from "../../actions/events";
 
 Modal.setAppElement("#root");
@@ -100,18 +100,9 @@ const CalendarModal = () => {
     }
 
     if (activeEvent) {
-      dispatch(eventUpdated(formValues));
+      dispatch(eventStartUpdate(formValues));
     } else {
-      dispatch(
-        eventAddNew({
-          ...formValues,
-          id: new Date().getTime(),
-          user: {
-            _id: "123",
-            name: "Edgar",
-          },
-        })
-      );
+      dispatch(eventStartAddNew(formValues));
     }
     closeModal();
   };
@@ -133,7 +124,7 @@ const CalendarModal = () => {
             <DateTimePicker
               className={classes.root}
               variant="dialog"
-              ampm={true}
+              ampm={false}
               minDate={dateStart}
               value={dateStart}
               onChange={handleStartDateChange}
@@ -159,7 +150,7 @@ const CalendarModal = () => {
             <DateTimePicker
               className={classes.root}
               variant="dialog"
-              ampm={true}
+              ampm={false}
               minDate={dateEnd}
               value={dateEnd}
               error={moment(dateStart).isSameOrAfter(moment(dateEnd))}

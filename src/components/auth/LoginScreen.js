@@ -33,11 +33,7 @@ const LoginScreen = () => {
     e.preventDefault();
 
     if (rPassword !== rPassword2) {
-      return Swal.fire(
-        "Error",
-        "Passwords has to be get the same length",
-        "error"
-      );
+      return Swal.fire("Error", "Passwords has to be equals", "error");
     }
 
     dispatch(startRegister(rEmail, rPassword, rName));
@@ -53,7 +49,7 @@ const LoginScreen = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Correo"
+                placeholder="tu@correo.com"
                 value={lEmail}
                 name="lEmail"
                 onChange={handleLoginInputChange}
@@ -63,7 +59,7 @@ const LoginScreen = () => {
               <input
                 type="password"
                 className="form-control"
-                placeholder="Contraseña"
+                placeholder="*******"
                 name="lPassword"
                 value={lPassword}
                 onChange={handleLoginInputChange}
@@ -82,7 +78,7 @@ const LoginScreen = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Nombre"
+                placeholder="Edgar"
                 value={rName}
                 name="rName"
                 onChange={handleRegisterInputChange}
@@ -92,7 +88,7 @@ const LoginScreen = () => {
               <input
                 type="email"
                 className="form-control"
-                placeholder="Correo"
+                placeholder="tu@correo.com"
                 value={rEmail}
                 name="rEmail"
                 onChange={handleRegisterInputChange}
@@ -102,7 +98,7 @@ const LoginScreen = () => {
               <input
                 type="password"
                 className="form-control"
-                placeholder="Contraseña"
+                placeholder="Password"
                 value={rPassword}
                 name="rPassword"
                 onChange={handleRegisterInputChange}
@@ -113,7 +109,7 @@ const LoginScreen = () => {
               <input
                 type="password"
                 className="form-control"
-                placeholder="Repita la contraseña"
+                placeholder="Confirm Password"
                 value={rPassword2}
                 name="rPassword2"
                 onChange={handleRegisterInputChange}

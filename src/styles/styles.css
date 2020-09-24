@@ -86,3 +86,22 @@
   position: fixed;
   left: 25px;
 }
+
+/* Loading */
+
+.load__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #eeeeee;
+  height: 100vh;
+}
+
+.load__container-text {
+  font-size: 64px;
+}
+
+.load__spinner {
+  color: #eb5252;
+}

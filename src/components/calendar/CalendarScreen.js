@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavbarCalendar from "../ui/Navbar";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -10,7 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { uiOpenModal } from "../../actions/ui";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/moment";
-import { eventClearActiveEvent, eventSetActive } from "../../actions/events";
+import {
+  eventClearActiveEvent,
+  eventSetActive,
+  eventStartLoading,
+} from "../../actions/events";
 import AddNewFab from "../ui/AddNewFab";
 import DeleteEventFab from "../ui/DeleteEventFab";
 
@@ -18,8 +22,24 @@ moment.locale("en");
 
 const localizer = momentLocalizer(moment);
 
+let formats = {
+  timeGutterFormat: "HH:mm",
+  eventTimeRangeFormat: ({ start, end }, culture, localizer) =>
+    localizer.format(start, "HH:mm") + " — " + localizer.format(end, "HH:mm"),
+  agendaTimeFormat: ({ start, end }, culture, localizer) =>
+    localizer.format(start, "HH:mm") + " — " + localizer.format(end, "HH:mm"),
+  agendaTimeRangeFormat: ({ start, end }, culture, localizer) =>
+    localizer.format(start, "HH:mm") + " — " + localizer.format(end, "HH:mm"),
+};
+
 const CalendarScreen = () => {
   const dispatch = useDispatch();
+
+  const { uid } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(eventStartLoading());
+  }, [dispatch]);
 
   const { events, activeEvent } = useSelector((state) => state.calendar);
 
@@ -47,11 +67,13 @@ const CalendarScreen = () => {
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
-      backgroundColor: "#367cf7",
-      opacity: 0.8,
-      displa: "block",
+      backgroundColor: uid === event.user._id ? "#367cf7" : "#465650",
+      opacity: 0.9,
+      display: "block",
       color: "white",
+      border: `2px solid ${uid === event.user._id ? "#2560c8" : "#1f2120"}`,
     };
+
     return {
       style,
     };
@@ -78,6 +100,7 @@ const CalendarScreen = () => {
           onSelectSlot={onSelectSlot}
           onDoubleClickEvent={onDoubleClick}
           onSelectEvent={onSelectEvent}
+          formats={formats}
         />
         <CalendarModal />
         {activeEvent && <DeleteEventFab />}

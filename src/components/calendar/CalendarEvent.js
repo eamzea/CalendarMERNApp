@@ -8,9 +8,9 @@ const CalendarEvent = ({ event }) => {
 
   return (
     <div>
-      <strong>{title}</strong>
-      <br />
-      <span>{name}</span>
+      <p>
+        <strong>{title}</strong> - <span>{name}</span>
+      </p>
     </div>
   );
 };
