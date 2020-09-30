@@ -53,6 +53,7 @@
   max-width: 50vw;
   outline: none;
   padding: 10px;
+  overflow-y: auto;
 }
 
 .form-control {
