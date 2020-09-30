@@ -115,7 +115,7 @@ const CalendarModal = () => {
       className="modal"
       overlayClassName="modal-fondo"
     >
-      <h1> {activeEvent ? "Editar Evento" : "Nuevo Evento"} </h1>
+      <h1> {activeEvent ? "Edit Event" : "New Event"} </h1>
       <hr />
       <form className="container" onSubmit={handleSubmitForm}>
         <div className="form-group">
@@ -183,7 +183,7 @@ const CalendarModal = () => {
             className={`form-control ${
               title.length > 1 ? "is-valid" : "is-invalid"
             }`}
-            placeholder="Título del evento"
+            placeholder="Title"
             name="title"
             autoComplete="off"
             value={title}
@@ -199,7 +199,7 @@ const CalendarModal = () => {
           <textarea
             type="text"
             className="form-control"
-            placeholder="Notas"
+            placeholder="Describe your event"
             rows="5"
             name="notes"
             value={notes}

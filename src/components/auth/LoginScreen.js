@@ -40,16 +40,16 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className="container login-container">
-      <div className="row">
+    <div className="container login-container d-flex justify-content-center align-items-center rounded">
+      <div className="row divs-container">
         <div className="col-md-6 login-form-1">
-          <h3>Ingreso</h3>
+          <h3>Login</h3>
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <input
                 type="text"
                 className="form-control"
-                placeholder="tu@correo.com"
+                placeholder="your@email.com"
                 value={lEmail}
                 name="lEmail"
                 onChange={handleLoginInputChange}
@@ -72,7 +72,7 @@ const LoginScreen = () => {
         </div>
 
         <div className="col-md-6 login-form-2">
-          <h3>Registro</h3>
+          <h3>Register</h3>
           <form onSubmit={handleRegister}>
             <div className="form-group">
               <input
@@ -117,7 +117,7 @@ const LoginScreen = () => {
             </div>
 
             <div className="form-group">
-              <input type="submit" className="btnSubmit" value="Crear cuenta" />
+              <input type="submit" className="btnSubmit" value="Register" />
             </div>
           </form>
         </div>

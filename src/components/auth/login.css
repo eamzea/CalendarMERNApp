@@ -1,5 +1,9 @@
 .login-container {
-  margin-top: 15%;
+  height: 100vh;
+}
+
+.divs-container {
+  width: 75%;
 }
 
 .login-form-1 {

@@ -66,12 +66,13 @@ const CalendarScreen = () => {
   };
 
   const eventStyleGetter = (event, start, end, isSelected) => {
+    console.log(event);
     const style = {
-      backgroundColor: uid === event.user._id ? "#367cf7" : "#465650",
+      backgroundColor: uid === event.user?._id ? "#367cf7" : "#465650",
       opacity: 0.9,
       display: "block",
       color: "white",
-      border: `2px solid ${uid === event.user._id ? "#2560c8" : "#1f2120"}`,
+      border: `2px solid ${uid === event.user?._id ? "#2560c8" : "#1f2120"}`,
     };
 
     return {
