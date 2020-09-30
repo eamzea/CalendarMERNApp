@@ -49,8 +49,8 @@
   border-radius: 5px;
   color: rgb(51, 51, 51);
   display: inline;
-  max-height: 620px;
-  max-width: 500px;
+  max-height: 75vh;
+  max-width: 50vw;
   outline: none;
   padding: 10px;
 }
@@ -118,5 +118,16 @@
 
   .rbc-toolbar > span {
     margin: 5px 0px;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 5px;
+    color: rgb(51, 51, 51);
+    display: inline;
+    max-height: 90vh;
+    max-width: 90vw;
+    outline: none;
+    padding: 10px;
   }
 }
