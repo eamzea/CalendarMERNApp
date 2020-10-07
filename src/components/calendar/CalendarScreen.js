@@ -58,15 +58,15 @@ const CalendarScreen = () => {
   const onViewChange = (e) => {
     setLastView(e);
     localStorage.setItem("lastView", e);
+    onSelectSlot();
   };
 
   const onSelectSlot = (e) => {
-    console.log(e);
+    console.log("hello");
     dispatch(eventClearActiveEvent());
   };
 
   const eventStyleGetter = (event, start, end, isSelected) => {
-    console.log(event);
     const style = {
       backgroundColor: uid === event.user?._id ? "#367cf7" : "#465650",
       opacity: 0.9,
@@ -101,6 +101,7 @@ const CalendarScreen = () => {
           onSelectSlot={onSelectSlot}
           onDoubleClickEvent={onDoubleClick}
           onSelectEvent={onSelectEvent}
+          onNavigate={onSelectSlot}
           formats={formats}
         />
         <CalendarModal />

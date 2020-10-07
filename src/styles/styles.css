@@ -80,6 +80,7 @@
   padding: 0px 10px;
   position: fixed;
   right: 25px;
+  z-index: 100;
 }
 
 .fab-danger {
