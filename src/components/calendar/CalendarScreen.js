@@ -17,6 +17,7 @@ import {
 } from "../../actions/events";
 import AddNewFab from "../ui/AddNewFab";
 import DeleteEventFab from "../ui/DeleteEventFab";
+import { messages } from "../../helpers/calendar-messages";
 
 moment.locale("en");
 
@@ -89,7 +90,7 @@ const CalendarScreen = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          // messages={messages}
+          messages={messages}
           eventPropGetter={eventStyleGetter}
           components={{
             event: CalendarEvent,

@@ -19,7 +19,9 @@ import {
   eventStartUpdate,
 } from "../../actions/events";
 
-Modal.setAppElement("#root");
+if (process.env.NODE_ENV !== "test") {
+  Modal.setAppElement("#root");
+}
 
 const now = moment().minutes(0).seconds(0).add(1, "hours");
 const final = now.clone().add(1, "hours");
@@ -113,8 +115,8 @@ const CalendarModal = () => {
       style={customStyles}
       closeTimeoutMS={250}
       className="modal"
-      overlayClassName="modal-fondo"
-    >
+      ariaHideApp={!process.env.NODE_ENV === "test"}
+      overlayClassName="modal-fondo">
       <h1> {activeEvent ? "Edit Event" : "New Event"} </h1>
       <hr />
       <form className="container" onSubmit={handleSubmitForm}>
@@ -203,8 +205,7 @@ const CalendarModal = () => {
             rows="5"
             name="notes"
             value={notes}
-            onChange={handleInputChange}
-          ></textarea>
+            onChange={handleInputChange}></textarea>
           <small id="emailHelp" className="form-text text-muted">
             Additional Information
           </small>
@@ -218,8 +219,7 @@ const CalendarModal = () => {
         <button
           type="button"
           className="btn btn-outline-danger btn-block"
-          onClick={closeModal}
-        >
+          onClick={closeModal}>
           <i className="far fa-window-close"></i>
           <span> Cancel</span>
         </button>
